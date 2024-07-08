@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>tickets</title>
+  <link rel="stylesheet" type="text/css" href="/css/tickets.css">
+</head>
+<body>
+  <div class="navbar">
+    <a href="/">Home</a>
+</div>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Gender</th>
+        <th>registration Date</th>
+        <th>travelling Date</th>
+        <th>amount</th>
+        <th>time</th>
+        <th>pnr</th>
+        <th>Mobile Number</th>
+      </tr>
+    </thead>
+    <tbody style=" background-color:#f0f0f0;">
+      <% tickets.forEach(ticket => { %>
+        <tr>
+          <td><%= ticket.name %></td>
+          <td><%= ticket.age %></td>
+          <td><%= ticket.gender %></td>
+          <td><%= ticket.regdate.toLocaleDateString() %></td>
+          <td><%= ticket.busdate.toLocaleDateString() %></td>
+          <td><%= ticket.amount %></td>
+          <td><%= ticket.time.toLocaleTimeString() %></td>
+
+          <td><%= ticket.pnr %></td>
+          <td><%= ticket.mobileNumber %></td>
+          
+          <td>
+            <a href="#" onclick="deleteticket('<%= ticket.pnr %>')"><button>Cancel Ticket</button></a>
+          </td>
+        </tr>
+      <% }); %>
+    </tbody>
+  </table>
+  
+  
+  <script>
+  function deleteticket(pnr) {
+    if (confirm('Are you sure you want to cancel this ticket?')) {
+      var xhr = new XMLHttpRequest();
+      xhr.open('DELETE', '/api/tickets/' + pnr, true);
+      xhr.onload = function () {
+        if (this.status === 204) {
+          location.reload();
+        } else if (this.status === 200) {
+          const response = JSON.parse(this.responseText);
+          const registrationDateTime = new Date(response.regdate);
+          const busDateTime = new Date(response.busdate);
+          const timeDifference = (busDateTime - registrationDateTime) / (1000 * 60 * 60);
+          alert(timeDifference);
+          let cancellationCharges = 0;
+          if (timeDifference < 6) {
+            cancellationCharges = 0;
+          } else if ( timeDifference < 12) {
+            cancellationCharges = 0.3;
+          } else if (timeDifference < 24) {
+            cancellationCharges = 0.5;
+          } else if (timeDifference < 48) {
+            cancellationCharges = 0.7;
+          } else {
+            cancellationCharges = 0.85;
+          }
+  
+          let responseMessage;
+          if (cancellationCharges === 0) {
+            responseMessage = "Sorry, no refund is available for cancellations within 6 hours.";
+          } else {
+            const refundAmount = (response.amount * (1 - cancellationCharges)).toFixed(2);
+            responseMessage = `Your cancellation amount is ${refundAmount}. The remaining amount is ${response.amount - refundAmount}.`;
+          }
+  
+          alert(responseMessage);
+        } else {
+          alert('Error: ' + this.status);
+        }
+      }
+      xhr.send();
+    }
+  }
+  </script>
+</body>
+</html>

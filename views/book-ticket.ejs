@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navbar">
+        <a href="/">Home</a>
+        <link rel="stylesheet" type="text/css" href="/css/add-ticket.css">
+    </div>
+    <form action="/api/tickets" method="post" id="add-ticket-form">
+        <label for="name">Name:</label><br>
+        <input type="text" id="name" name="name" required><br>
+        
+        <label for="age">Age:</label><br>
+        <input type="number" id="age" name="age" required><br>
+        
+        <label for="gender">Gender:</label><br>
+        <select id="gender" name="gender" required>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+        </select><br>
+        
+        <label for="mobileNumber">Mobile Number</label><br>
+        <input type="number" id="mobileNumber" name="mobileNumber" required><br>
+        
+        <label for="amount">Amount:</label><br>
+        <input type="number" id="amount" name="amount" required><br>
+
+        <label for="regdate">Registration Date:</label><br>
+        <input type="datetime-local" id="regdate" name="regdate" required><br>
+
+        <label for="busdate">Select Bus Date and Time:</label><br>
+        <input type="datetime-local" id="datetime" name="busdate" required><br>
+
+        <input type="hidden" id="pnr" name="pnr">
+        <input type="submit" value="Submit">
+    </form>
+    <script>
+        document.getElementById('pnr').value = Math.floor(10000000 + Math.random() * 90000000);
+    </script>
+</body>
+</html>

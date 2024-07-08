@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ticket Management System</title>
+    <link rel="stylesheet" type="text/css" href="/css/home.css">
+</head>
+<body>
+    <div class="container">
+        <div class="navbar">
+            <a href="/" class="button">Home</a>
+            <div class="welcome">
+                <h1 style="text-align: center;">Welcome to SRGEC Bus Services</h1>
+                
+            </div>
+        </div>
+        <br>
+        <div class="content">
+            <div class="button-container">
+                <a href="/api/tickets" class="button">View tickets</a>
+                <a href="/add-ticket" class="button">Add ticket</a>
+                <a href="#" onclick="showSearchForm()" class="button">Search ticket</a>
+                <% if (typeof error !== 'undefined') { %>
+                    <p><%= error %></p>
+                <% } %>
+            </div>
+            <div class="form-container" id="searchForm" style="display: none;">
+                <form action="/api/tickets" method="GET">
+                    <input type="text" name="name" placeholder="Enter ticket Pnr number">
+                    <br/>
+                    <button type="submit" class="button">Search</button>
+                </form>
+            </div>
+
+            <div class="welcome">
+                
+            </div>
+        </div>
+    
+
+        <% if (typeof message !== 'undefined') { %>
+            <p><%= message %></p>
+        <% } %>
+
+        
+        
+    </div>
+ 
+    <script>
+    function showSearchForm() {
+        var form = document.getElementById('searchForm');
+        if (form.style.display === 'none') {
+            form.style.display = 'block';
+        } else {
+            form.style.display = 'none';
+        }
+    }
+    </script>
+     
+</body>
+
+</html>
